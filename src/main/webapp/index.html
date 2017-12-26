@@ -1,0 +1,53 @@
+<script type="text/javascript">
+	window.location.href="file/list";
+</script>
+<html>
+<head><title>Index of / file /</title></head>
+<style>
+pre table{
+	font-size:16px;
+}
+</style>
+<body bgcolor="white">
+<h1>Index of / file /</h1><hr>
+<pre>
+<table id="fileList">
+</table>
+</pre>
+<hr>
+
+<script src="js/jquery.min.js"></script>
+<script type="text/javascript">
+window.location.href="file/list";
+function loadFileList(){
+	$.ajax({
+	    url : "file/list", //请求的url地址
+	    dataType : "json", //返回格式为json
+	    async : true, 
+	    data : {}, 
+	    type : "POST", 
+	    success:function(result){
+	           if(result.code==1){
+	        	   var dataArr = result.data;
+	        	   for (var index in dataArr) {
+	                   var id = dataArr[index].id;
+	                   var fileName = dataArr[index].fileName;
+	                   var uploadTime = dataArr[index].uploadTime;
+	                   var fileSize = dataArr[index].fileSize;
+	                   $("#fileList").append("<tr><td><a href='file/download/"+fileName+"'>"+fileName+
+	                		   "</a>&nbsp;&nbsp;&nbsp;</td><td>"+uploadTime+"&nbsp;&nbsp;&nbsp;</td><td>96K&nbsp;&nbsp;&nbsp;</td><td><a href='#'>下载</a> <a href='#'>预览</a></td></tr>");
+	               }
+	           }
+	           if(result.code==0){
+	               alert(result.message);
+	           }
+	        },
+	    error : function() {
+	        alert("呀，服务器出现了错误");
+	    }
+	});
+}
+
+</script>
+</body>
+</html>
