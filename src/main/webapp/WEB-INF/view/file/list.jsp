@@ -51,7 +51,7 @@ pre table {
 		  <td><a href="${pageContext.request.contextPath}/file/download/${webFile.id}">${webFile.fileName }</a>&nbsp;&nbsp;&nbsp;</td>
 		  <td><fmt:formatDate value="${webFile.uploadTime}" pattern="yyyy-MM-dd HH:mm" />&nbsp;&nbsp;&nbsp;</td>
 		  <td>${webFile.fileSize div 1024 }K&nbsp;&nbsp;&nbsp;</td>
-		  <td><a href="${pageContext.request.contextPath}/file/download/${webFile.id}">下载</a> <a target="_blabk" href="${pageContext.request.contextPath}/file/preview/${webFile.id}">预览</a></td>
+		  <td><a href="${pageContext.request.contextPath}/file/download/${webFile.id}">下载</a> <a target="_blabk" href="${pageContext.request.contextPath}/file/preview/${webFile.id}">预览</a> <a onclick="deleteFile('${webFile.id}')" href="#">删除</a></td>
 		</tr>
 	</c:forEach>
 </table>
@@ -71,6 +71,37 @@ pre table {
 
 <script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
 <script type="text/javascript">
+function deleteFile(fileId){
+	var msg = "你确定要删除吗？";
+	if (confirm(msg)==false){
+		   return ;
+	}
+	$("body").css("background","#e6e6e6");
+	document.getElementById('center-model').style.display='block';
+	$.ajax({
+	    url : "${pageContext.request.contextPath}/file/delete/"+fileId, //请求的url地址
+	    dataType : "json", //返回格式为json
+	    type : "GET", 
+	    success:function(result){
+	           if(result.code == 1){
+	        	   document.getElementById('center-model').style.display='none';
+	           	   alert(result.message);   
+	           	   location.reload(true);   
+	           }
+	           if(result.code == 0){
+  		          document.getElementById('center-model').style.display='none';
+	        	  alert(result.message);
+	        	  $("body").css("background","white");
+	           }
+	     	},
+		  error : function() {
+	           document.getElementById('center-model').style.display='none';
+		       alert("呀，服务器出现了错误");
+			   $("body").css("background","white");
+		    }
+		});
+}
+
 /*
  * 利用FormData使用Jquery AJAX上传文件 
  */

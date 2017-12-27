@@ -128,20 +128,26 @@ public class WebFileController {
 		}
 	}
 	
-	@RequestMapping(value="/delete/{id}", method= {RequestMethod.POST})
+	/**
+	 * 文件删除
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value="/delete/{id}", method= {RequestMethod.GET})
 	@ResponseBody
 	public ResultMap delete(@PathVariable("id")BigDecimal id){
 		try {
 			int deleteResult = webFileService.deleteById(id);
 			if(deleteResult == 1){
-				return new ResultMap(1, "{}", "文件已上传");
+				return new ResultMap(1, "{}", "文件已删除");
 			}
-			return new ResultMap(0, "{}", "文件上传失败");
+			return new ResultMap(0, "{}", "文件删除失败");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return new ResultMap(0, "{}", "文件上传失败");
+		return new ResultMap(0, "{}", "文件删除失败");
 	}
+	
 	/**
 	 * 上传文件过大的异常处理
 	 * @param e
